@@ -40,7 +40,7 @@ const App = () => {
       noteService
         .create(newPerson)
         .then(returnedPerson => {
-          setPersons(persons.concat(newPerson))
+          setPersons(persons.concat(returnedPerson))
           setNewNumber('000-000-0000')
         })
     }
