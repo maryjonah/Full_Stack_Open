@@ -30,6 +30,8 @@ const App = () => {
 
     if (isNamePresent){
       window.alert(`${newName} is already added to phonebook`)
+      setNewName('')
+      setNewNumber('000-000-0000')
     } else {
       const newPerson = {
         name: newName,
@@ -58,6 +60,16 @@ const App = () => {
     setSearchText(event.target.value)
   }
 
+  const handleDelete = id => {
+    const person = persons.find(person => person.id === id)
+    
+    if (window.confirm(`Delete ${person.name}?`)) {
+      noteService 
+      .deletePerson(person)
+      .then(setPersons(persons.filter(person => person.id !== id)))
+    }
+  }
+
   return (
     <>
       <Display heading="Phonebook" />
@@ -73,7 +85,7 @@ const App = () => {
         handleNumberChange={handleNumberChange} />
 
       <Display text="Numbers" />
-      <Persons filteredPeople={filteredPeople} />
+      <Persons filteredPeople={filteredPeople} btnDelete={handleDelete} />
     </>
   )
 }
