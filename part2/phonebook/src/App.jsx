@@ -6,6 +6,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
+import noteService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -34,10 +35,13 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(newPerson))
+      noteService
+        .create(newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.concat(newPerson))
+          setNewNumber('000-000-0000')
+        })
     }
-
-    setNewNumber('000-000-0000')
   }
 
   const handleNameChange = event => {
