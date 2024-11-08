@@ -26,12 +26,20 @@ const App = () => {
   const addPerson = event => {
     event.preventDefault()
 
-    const isNamePresent = persons.some(person => person.name == newName)
+    const repeatedPerson = persons.find(person => person.name == newName)
 
-    if (isNamePresent){
-      window.alert(`${newName} is already added to phonebook`)
-      setNewName('')
-      setNewNumber('000-000-0000')
+    if (repeatedPerson){
+      const updatePerson = {...repeatedPerson, number: newNumber}
+
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        noteService
+          .update(updatePerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.name === newName ? returnedPerson : person))
+            setNewName('')
+            setNewNumber('000-000-0000')      
+          })
+      }
     } else {
       const newPerson = {
         name: newName,
