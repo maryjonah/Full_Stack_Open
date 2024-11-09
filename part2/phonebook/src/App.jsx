@@ -5,6 +5,7 @@ import Display from './components/Display'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 
 import noteService from './services/persons'
 
@@ -14,6 +15,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('000-0000000')
   const [filterTerm, setSearchText] = useState('')
+  const [notifyMsg, setNotifyMsg] = useState('')
 
   useEffect(() => {
     axios
@@ -37,7 +39,9 @@ const App = () => {
           .then(returnedPerson => {
             setPersons(persons.map(person => person.name === newName ? returnedPerson : person))
             setNewName('')
-            setNewNumber('000-000-0000')      
+            setNewNumber('000-000-0000')
+            setNotifyMsg(`Contact number updated to ${newNumber}`)
+            setTimeout(() => { setNotifyMsg(null)}, 7000)
           })
       }
     } else {
@@ -50,6 +54,8 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
           setNewNumber('000-000-0000')
+          setNotifyMsg(`${newName} details added to phonebook`)
+          setTimeout(() => { setNotifyMsg(null)}, 7000)
         })
     }
   }
@@ -83,6 +89,8 @@ const App = () => {
       <Display heading="Phonebook" />
 
       <Filter filterTerm={filterTerm} handleFilter={handleFilter}/>
+
+      <Notification message={notifyMsg} />
 
       <Display heading="add a new" />
       <PersonForm 
