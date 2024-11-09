@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 
 import Display from './components/Display'
 import Filter from './components/Filter'
@@ -11,19 +10,19 @@ import noteService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('000-0000000')
   const [filterTerm, setSearchText] = useState('')
   const [notifyMsg, setNotifyMsg] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
-  })
+    noteService 
+    .getAll()
+    .then(intialPersons => {
+      setPersons(intialPersons)
+    })
+  }, [])
+  
   
   const addPerson = event => {
     event.preventDefault()
@@ -60,19 +59,24 @@ const App = () => {
     }
   }
 
+
   const handleNameChange = event => {
     setNewName(event.target.value)
   }
+
 
   const handleNumberChange = event => {
     setNewNumber(event.target.value)
   }
 
+
   const filteredPeople = persons.filter(person => person.name.toLowerCase().includes(filterTerm.toLowerCase()))
+
 
   const handleFilter = event => {
     setSearchText(event.target.value)
   }
+
 
   const handleDelete = id => {
     const person = persons.find(person => person.id === id)
