@@ -2,4 +2,11 @@ const dummy = blogs => {
     return 1
 }
 
-module.exports = { dummy }
+const totalLikes = blogs => {
+    let sumLike = 0
+    for(const objBlog of blogs) {
+        sumLike += objBlog['likes']
+    }
+    return sumLike
+}
+module.exports = { dummy, totalLikes }
