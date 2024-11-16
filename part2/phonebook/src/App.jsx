@@ -7,7 +7,7 @@ import Persons from './components/Persons'
 import Notification from './components/Notification'
 import ErrorNotification from './components/ErrorNotification'
 
-import noteService from './services/persons'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -18,7 +18,7 @@ const App = () => {
   const [errorMsg, setErrorMsg] = useState('')
 
   useEffect(() => {
-    noteService 
+    personService 
     .getAll()
     .then(intialPersons => {
       setPersons(intialPersons)
@@ -35,8 +35,8 @@ const App = () => {
       const updatePerson = {...repeatedPerson, number: newNumber}
 
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        noteService
-          .update(updatePerson)
+        personService
+          .update2(updatePerson)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.name === newName ? returnedPerson : person))
             setNewName('')
@@ -50,7 +50,7 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      noteService
+      personService
         .create(newPerson)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
@@ -58,6 +58,24 @@ const App = () => {
           setNotifyMsg(`${newName} details added to phonebook`)
           setTimeout(() => { setNotifyMsg(null)}, 7000)
         })
+        .catch(error => {
+          setErrorMsg(error.response.data.error)
+          setTimeout(() => { setErrorMsg(null)}, 5000)
+        })
+    }
+  }
+
+  const handleDelete = id => {
+    const person = persons.find(person => person.id === id)
+    
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService 
+      .deletePerson(person)
+      .then(setPersons(persons.filter(person => person.id !== id)))
+      .catch(error => {
+        setErrorMsg(`Information of ${person.name} has already been removed from server.`)
+        setTimeout(() => {setErrorMsg(null)}, 5000)
+      })
     }
   }
 
@@ -79,20 +97,6 @@ const App = () => {
     setSearchText(event.target.value)
   }
 
-
-  const handleDelete = id => {
-    const person = persons.find(person => person.id === id)
-    
-    if (window.confirm(`Delete ${person.name}?`)) {
-      noteService 
-      .deletePerson(person)
-      .then(setPersons(persons.filter(person => person.id !== id)))
-      .catch(error => {
-        setErrorMsg(`Information of ${person.name} has already been removed from server.`)
-        setTimeout(() => {setErrorMsg(null)}, 5000)
-      })
-    }
-  }
 
   return (
     <>
