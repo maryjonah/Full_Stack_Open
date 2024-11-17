@@ -32,6 +32,23 @@ test('the default property __id is renamed to id', async () => {
     assert.ok(firstBlog.hasOwnProperty('id'))
 })
 
+test('a valid blog can be added and the total number of blogs increases by 1', async () => {
+    const newBlog = {
+        title: "The gods are not be blamed",
+        author: "Oluwatosin",
+        url: "https://www.oreilly.com",
+        likes: 500
+    }
+    
+    await api.post('/api/blogs').send(newBlog).expect(201)
+
+    const currentBlogs = await helper.blogsInDb()
+    assert.strictEqual(currentBlogs.length, helper.initialBlogs.length + 1)
+
+    const blogTitles = currentBlogs.map(blog => blog.title)
+    assert(blogTitles.includes('The gods are not be blamed'))
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
