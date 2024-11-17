@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, expect } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -24,6 +24,12 @@ test('blogs are returned as json', async () => {
 test('there are 2 notes initially saved automatically for each test', async () => {
     const response = await api.get('/api/blogs')
     assert.strictEqual(response.body.length, helper.initialBlogs.length)
+})
+
+test('the default property __id is renamed to id', async () => {
+    const response = await api.get('/api/blogs')
+    const firstBlog = response.body[0]
+    assert.ok(firstBlog.hasOwnProperty('id'))
 })
 
 after(async () => {
