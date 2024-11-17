@@ -49,6 +49,21 @@ test('a valid blog can be added and the total number of blogs increases by 1', a
     assert(blogTitles.includes('The gods are not be blamed'))
 })
 
+test('a valid blog with no likes defaults to 0 likes', async () => {
+    const newBlog = {
+        title: "The gods are not be blamed",
+        author: "Oluwatosin",
+        url: "https://www.oreilly.com",
+    }
+    
+    await api.post('/api/blogs').send(newBlog).expect(201)
+
+    const currentBlogs = await helper.blogsInDb()
+    const lastBlog = currentBlogs[currentBlogs.length - 1]
+    
+    assert.equal(lastBlog.likes, 0)
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
