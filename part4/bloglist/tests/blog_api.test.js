@@ -89,7 +89,6 @@ test('a new blog without url is not saved', async () => {
 })
 
 describe('deletion of a blog', () => {
-
     test('succeeds with 204 when id is valid', async () => {
         const blogsAtStart = await helper.blogsInDb()
         const blogToDelete = blogsAtStart[0]
@@ -98,6 +97,21 @@ describe('deletion of a blog', () => {
 
         const blogsAtEnd = await helper.blogsInDb()
         assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+    })
+})
+
+describe('updating the likes of a blog', () => {
+    test('likes of a blog is updated', async () => {
+        const blogsAtStart = await helper.blogsInDb()
+        const firstBlog = blogsAtStart[0]
+        firstBlog.likes = 10
+
+        await api.put(`/api/blogs/${firstBlog.id}`).send(firstBlog).expect(200)
+
+        const blogsAtEnd = await helper.blogsInDb()
+        const updatedBlog = blogsAtEnd.filter(blog => blog.id === `${firstBlog.id}`)
+        
+        assert.equal(updatedBlog[0].likes, 10)
     })
 })
 
