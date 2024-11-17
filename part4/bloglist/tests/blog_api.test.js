@@ -60,8 +60,32 @@ test('a valid blog with no likes defaults to 0 likes', async () => {
 
     const currentBlogs = await helper.blogsInDb()
     const lastBlog = currentBlogs[currentBlogs.length - 1]
-    
+
     assert.equal(lastBlog.likes, 0)
+})
+
+test('a new blog without title is not saved', async () => {
+    const newBlog = {
+        author: "Galvin Meld",
+        url: "https://oreilly.com",
+        likes: 10
+    }
+    await api.post('/api/post').send(newBlog)
+    
+    const currentBlogs = await helper.blogsInDb()
+    assert.strictEqual(currentBlogs.length, helper.initialBlogs.length)
+})
+
+test('a new blog without url is not saved', async () => {
+    const newBlog = {
+        title: "My first copy book",
+        author: "Galvin Meld",
+        likes: 10000
+    }
+    await api.post('/api/post').send(newBlog)
+    
+    const currentBlogs = await helper.blogsInDb()
+    assert.strictEqual(currentBlogs.length, helper.initialBlogs.length)
 })
 
 after(async () => {
