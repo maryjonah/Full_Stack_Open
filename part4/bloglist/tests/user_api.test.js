@@ -14,10 +14,13 @@ describe('when there is initially 1 user in db', () => {
     beforeEach(async () => {
         await User.deleteMany({})
 
-        const passwordHash = await bcrypt.hash('sekret', 0)
-        const user = new User({ username: 'root', passwordHash: passwordHash })
+        const userObjects = helper.initialUsers.map(async (user) => {
+            const hashedPassword = await bcrypt.hash(user.password, 0)
+            const userSaved = new User({ username: user.username, passwordHash: hashedPassword })
+            return await userSaved.save()
+          });
+        await Promise.all(userObjects)
 
-        await user.save()
     })
 
     test('creation succeeds with a fresh username', async () => {
@@ -36,6 +39,34 @@ describe('when there is initially 1 user in db', () => {
 
         const usernames = usersAtEnd.map(user => user.username)
         assert(usernames.includes(newUser.username))
+    })
+
+    test('creation fails with proper statuscode and message when username has already been taken', async () => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            username: "jonahmary",
+            name: "Kuukua",
+            password: "Hello World"    
+        }
+        const result = await api.post('/api/users').send(newUser).expect(400).expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb()
+        assert(result.body.error.includes('expected `username` to be unique'))
+
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+
+    test('creation fails with proper statuscode and message when username is less than 3 characters', async () => {
+        const newUser = {
+            username: "Hi",
+            name: "Kuukua",
+            password: "Hello World"    
+        }
+        const result = await api.post('/api/users').send(newUser).expect(400).expect('Content-Type', /application\/json/)
+        console.log(result.body.error)
+        
+        assert(result.body.error.includes('User validation failed'))
     })
 })
 
