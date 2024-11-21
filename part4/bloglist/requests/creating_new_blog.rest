@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvbmFobWFyIiwiaWQiOiI2NzNkMGE3NGVlZThiZjczMDI5NDY2MDEiLCJpYXQiOjE3MzIyMTYwNzJ9.vJ03inV_6oxRlXKyBhVH-F4yYTdaGeLxqKLyN1xPt1M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvbmFobWFyIiwiaWQiOiI2NzNkMGE3NGVlZThiZjczMDI5NDY2MDEiLCJpYXQiOjE3MzIyMjcxMTB9.mO2uOoAFyhNVq8MmQrMUfKmckAGOUIH2l1Yy01GXGj8
 
 {
-    "title": "All The Beauty In The World",
+    "title": "Imagine Dragons",
     "author": "Patrick Bringley",
     "url": "https://bookoftheday.org/all-the-beauty-in-the-world-the-metropolitan-museum-of-art-and-me-patrick-bringley/",
     "likes": 326
