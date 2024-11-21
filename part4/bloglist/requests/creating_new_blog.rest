@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvbmFobWFyIiwiaWQiOiI2NzNkMGE3NGVlZThiZjczMDI5NDY2MDEiLCJpYXQiOjE3MzIyMTYwNzJ9.vJ03inV_6oxRlXKyBhVH-F4yYTdaGeLxqKLyN1xPt1M
 
 {
-    "title": "The city and its uncertain walls",
-    "author": "Haruki Murakami",
-    "url": "https://bookoftheday.org/the-city-and-its-uncertain-walls-haruki-murakami/",
-    "likes": 15,
-    "userId": "673d0a74eee8bf7302946601"
+    "title": "All The Beauty In The World",
+    "author": "Patrick Bringley",
+    "url": "https://bookoftheday.org/all-the-beauty-in-the-world-the-metropolitan-museum-of-art-and-me-patrick-bringley/",
+    "likes": 326
 }
