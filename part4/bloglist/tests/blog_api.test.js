@@ -38,17 +38,17 @@ describe('when there are some initial blogs saved', () => {
     
     describe('addition of a blog post', () => {
         test('succeeds with valid data and number of blogs increases by 1', async () => {
-            const users = await userHelper.usersInDb()
+            const usersSaved = await api.post('/api/login').send({ username: 'jmary', password: 'Hello'})
+            const token = usersSaved.body.token
 
             const newBlog = {
                 title: "The gods are not be blamed",
                 author: "Oluwatosin",
                 url: "https://www.oreilly.com",
                 likes: 500,
-                userId: users[0].id
             }
             
-            await api.post('/api/blogs').send(newBlog).expect(201)
+            await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(newBlog).expect(201)
         
             const currentBlogs = await helper.blogsInDb()
             assert.strictEqual(currentBlogs.length, helper.initialBlogs.length + 1)
@@ -58,16 +58,16 @@ describe('when there are some initial blogs saved', () => {
         })
         
         test('succeeds with 201 and likes 0 when data does not have likes data', async () => {
-            const users = await userHelper.usersInDb()
+            const usersSaved = await api.post('/api/login').send({ username: 'maryj', password: 'World'})
+            const token = usersSaved.body.token
 
             const newBlog = {
                 title: "The gods are not be blamed",
                 author: "Oluwatosin",
                 url: "https://www.oreilly.com",
-                userId: users[0].id
             }
             
-            await api.post('/api/blogs').send(newBlog).expect(201)
+            await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(newBlog).expect(201)
         
             const currentBlogs = await helper.blogsInDb()
             const lastBlog = currentBlogs[currentBlogs.length - 1]
