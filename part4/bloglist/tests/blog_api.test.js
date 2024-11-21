@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 
 const helper = require('./testblog_helper')
+const userHelper = require('./userblog_helper')
+
 const app = require('../app')
 const api = supertest(app)
 
@@ -36,11 +38,14 @@ describe('when there are some initial blogs saved', () => {
     
     describe('addition of a blog post', () => {
         test('succeeds with valid data and number of blogs increases by 1', async () => {
+            const users = await userHelper.usersInDb()
+
             const newBlog = {
                 title: "The gods are not be blamed",
                 author: "Oluwatosin",
                 url: "https://www.oreilly.com",
-                likes: 500
+                likes: 500,
+                userId: users[0].id
             }
             
             await api.post('/api/blogs').send(newBlog).expect(201)
@@ -53,10 +58,13 @@ describe('when there are some initial blogs saved', () => {
         })
         
         test('succeeds with 201 and likes 0 when data does not have likes data', async () => {
+            const users = await userHelper.usersInDb()
+
             const newBlog = {
                 title: "The gods are not be blamed",
                 author: "Oluwatosin",
                 url: "https://www.oreilly.com",
+                userId: users[0].id
             }
             
             await api.post('/api/blogs').send(newBlog).expect(201)
@@ -68,10 +76,13 @@ describe('when there are some initial blogs saved', () => {
         })
         
         test('number of posts is not increased when data does nt include title', async () => {
+            const users = await userHelper.usersInDb()
+
             const newBlog = {
                 author: "Galvin Meld",
                 url: "https://oreilly.com",
-                likes: 10
+                likes: 10,
+                userId: users[0].id
             }
             await api.post('/api/post').send(newBlog)
             
@@ -80,10 +91,13 @@ describe('when there are some initial blogs saved', () => {
         })
         
         test('number of posts is not increased when data does not include url', async () => {
+            const users = await userHelper.usersInDb()
+
             const newBlog = {
                 title: "My first copy book",
                 author: "Galvin Meld",
-                likes: 10000
+                likes: 10000,
+                userId: users[0].id
             }
             await api.post('/api/post').send(newBlog)
             
