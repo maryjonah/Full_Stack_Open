@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "The city and its uncertain walls",
+    "author": "Haruki Murakami",
+    "url": "https://bookoftheday.org/the-city-and-its-uncertain-walls-haruki-murakami/",
+    "likes": 15,
+    "userId": "673d0a74eee8bf7302946601"
+}
