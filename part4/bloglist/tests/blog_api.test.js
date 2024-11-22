@@ -107,14 +107,25 @@ describe('when there are some initial blogs saved', () => {
     })
     
     describe('deletion of a blog', () => {
-        test('succeeds with 204 when id is valid', async () => {
-            const blogsAtStart = await helper.blogsInDb()
-            const blogToDelete = blogsAtStart[0]
+        test('succeeds with 204 when owner deletes blog', async () => {
+            const usersSaved = await api.post('/api/login').send({ username: 'maryj', password: 'World'})
+            const token = usersSaved.body.token
+
+            const newBlog = {
+                title: "The gods are not be blamed",
+                author: "Oluwatosin",
+                url: "https://www.oreilly.com",
+            }
+            
+            const returnedBlog = await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(newBlog).expect(201)
     
-            await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+            await api.delete(`/api/blogs/${returnedBlog.body.id}`).set('Authorization', `Bearer ${token}`).expect(204)
     
             const blogsAtEnd = await helper.blogsInDb()
-            assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+
+            // rather confirm the content does not have the recently added title
+            const contents = blogsAtEnd.map(blog => blog.author)
+            assert(!contents.includes('Oluwatosin'))
         })
     })
     
