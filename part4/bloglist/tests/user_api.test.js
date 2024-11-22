@@ -64,7 +64,6 @@ describe('when there is initially 1 user in db', () => {
             password: "Hello World"    
         }
         const result = await api.post('/api/users').send(newUser).expect(400).expect('Content-Type', /application\/json/)
-        console.log(result.body.error)
         
         assert(result.body.error.includes('User validation failed'))
     })
