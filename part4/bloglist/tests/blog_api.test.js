@@ -35,6 +35,15 @@ describe('when there are some initial blogs saved', () => {
         const firstBlog = response.body[0]
         assert.ok(firstBlog.hasOwnProperty('id'))
     })
+
+    describe('viewing a specific blog', () => {
+        test('succeeds with a valid blog id', async () => {
+            const blogsAtStart = await helper.blogsInDb()
+            const blogToView = blogsAtStart[0]
+            const resultBlog = await api.get(`/api/blogs/${blogToView.id}`).expect(200)
+            assert.deepStrictEqual(resultBlog.body, blogToView)
+        })
+    })
     
     describe('addition of a blog post', () => {
         test('succeeds with valid data and number of blogs increases by 1', async () => {
@@ -127,6 +136,13 @@ describe('when there are some initial blogs saved', () => {
             const contents = blogsAtEnd.map(blog => blog.author)
             assert(!contents.includes('Oluwatosin'))
         })
+        test('fails with 401 when it is not the owner deleting the blog with 204 when owner deletes blog', async () => {
+            const blogsAtStart = await helper.blogsInDb()
+            const blogToDelete = blogsAtStart[0]
+
+            await api.delete(`/api/blogs/${blogToDelete.id}`).set('Authorization', `Bearer helloThere`).expect(401)    
+        })
+
     })
     
     describe('updating the likes of a blog', () => {
