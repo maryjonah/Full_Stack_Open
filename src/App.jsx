@@ -24,6 +24,16 @@ const App = () => {
       })
   }, [])
 
+  // check if user is saved in localStorage if yes set details in user state and create Bearer token
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user  = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+
   // Add a new Note
   const addNote = (event) => {
     event.preventDefault()
@@ -67,8 +77,11 @@ const App = () => {
     
     try {
       const user = await loginService.login({ username, password })
+
+      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
+
       noteService.setToken(user.token)
-      
+
       setUser(user)
       setUsername('')
       setPassword('')
@@ -84,6 +97,12 @@ const App = () => {
 
   const handlePasswordChange = event => {
     setPassword(event.target.value)
+  }
+
+  const logOutUser = () => {
+    window.localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
+    noteService.setToken(user.token)
   }
 
   const notesToShow = showAll
@@ -113,6 +132,10 @@ const App = () => {
     </form> 
   )
 
+  const logOut = () => (
+    <button onClick={() => logOutUser()}>Logout </button>
+  )
+
 
   return (
     <div>
@@ -123,6 +146,7 @@ const App = () => {
         <div>
           <p>{user.name} logged-in</p>
           { noteForm() }
+          { logOut() }
         </div>
       }
 
