@@ -11,7 +11,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [displayMsg, setDisplayMsg] = useState('')
+  const [displayMsg, setDisplayMsg] = useState(null)
   const [isSuccess, setisSuccess] = useState(false)
   
   // state for adding new blog details
@@ -82,6 +82,7 @@ const App = () => {
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
+    <h2>log in to application</h2>
     <div>
       username <input type="text" value={username} name="Username" onChange={({target}) => setUsername(target.value)} />
     </div>

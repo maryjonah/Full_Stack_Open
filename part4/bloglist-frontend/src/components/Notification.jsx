@@ -1,6 +1,6 @@
 const Notification = ({ displayMsg, isSuccess }) => {
     if (displayMsg === null) {
-        return null
+        return <div className="none"></div>
     } 
     return (
         <div className={`displayMsg ${isSuccess ? 'success': 'error'}`}>
