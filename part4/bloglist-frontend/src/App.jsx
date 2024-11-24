@@ -19,11 +19,24 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  }, [])
+
   const handleLogin = async event => {
     event.preventDefault()
 
     try {
+      // when login is successful a user object with token, username etc is returned, store in localStorage
       const user = await loginService.login({ username, password })
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+
+      // TODO: to create new note pass user.token to blogService 
+
       setUser(user)
       setUsername('')
       setPassword('')
@@ -45,10 +58,21 @@ const App = () => {
   </form>
   )
 
+  const logOutUser = () => {
+    window.localStorage.removeItem('loggedBlogAppUser')
+    setUser(null)
+    // TODO: to create new note pass user.token to blogService as it will be null hence token is empty
+  }
+
+  // react component of a btn that calls the logOutUser functionality
+  const logOutBtn = () => {
+    return <button onClick={() => logOutUser()}>Logout</button>
+  }
+
   const blogInfo = () => (
     <div>
       <h2>blogs</h2>
-      <p>{user.name} logged in</p>
+      <p>{user.name} logged in {logOutBtn()} </p>
       {blogs.map(blog => <Blog key={blog.id} blog={blog} />
       )}
     </div>
