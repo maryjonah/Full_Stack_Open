@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import Blog from './components/Blog'
-import ErrorNotification from './components/ErrorNotification'
+import Notification from './components/Notification'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -11,7 +11,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMsg, setErrorMsg] = useState('')
+  const [displayMsg, setDisplayMsg] = useState('')
+  const [isSuccess, setisSuccess] = useState(false)
   
   // state for adding new blog details
   const [newTitle, setTitle] = useState('')
@@ -31,6 +32,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -49,6 +51,9 @@ const App = () => {
     .create(blogObject)
     .then(returnedBlog => {
       setBlogs(blogs.concat(returnedBlog))
+      setDisplayMsg(`a new blog ${newTitle} by ${newAuthor} added`)
+      setisSuccess(true)
+      setTimeout(() => setDisplayMsg(null), 5000)
       setTitle('')
       setAuthor('')
       setUrl('')
@@ -69,8 +74,9 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch(exception) {
-      setErrorMsg('Wrong credentials')
-      setTimeout(() => setErrorMsg(null), 5000)
+      setDisplayMsg('Wrong username or password')
+      setisSuccess(false)
+      setTimeout(() => setDisplayMsg(null), 5000)
     }
   }
 
@@ -97,7 +103,7 @@ const App = () => {
   )
 
   const logOutUser = () => {
-    window.localStorage.removeItem('loggedBlogAppUser')
+    window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
     blogService.setToken(user.token)
   }
@@ -121,7 +127,7 @@ const App = () => {
 
   return (
     <div>
-      <ErrorNotification errorMsg={errorMsg} />
+      <Notification displayMsg={displayMsg} isSuccess={isSuccess} />
       { user === null ? loginForm() : 
       <div>
         { blogInfo() }
