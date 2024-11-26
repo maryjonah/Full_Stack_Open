@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import CreateBlogForm from './components/CreateBlogForm'
+import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -93,15 +95,21 @@ const App = () => {
   </form>
   )
 
-  const newBlogForm = () => (
-    <form onSubmit={addBlog}>
-      title: <input type="text" value={newTitle} onChange={({target}) => setTitle(target.value)} /><br/>
-      author: <input type="text" value={newAuthor} onChange={({target}) => setAuthor(target.value)} /><br />
-      url: <input type="text" value={newUrl} onChange={({target}) => setUrl(target.value)} /><br />
-
-      <button type="submit">create</button>
-    </form>
-  )
+  const newBlogForm = () => {
+    return (
+      <Togglable buttonLabel={'create post'}>
+        <CreateBlogForm
+          handleSubmit={ addBlog }
+          title={ newTitle }
+          author={ newAuthor }
+          url={ newUrl }
+          handleTitle={({ target }) => setTitle(target.value)}
+          handleAuthor={({ target}) => setAuthor(target.value)}
+          handleUrl={({ target }) => setUrl(target.value)}      
+        />
+      </Togglable>
+    )
+  }
 
   const logOutUser = () => {
     window.localStorage.removeItem('loggedBlogappUser')
