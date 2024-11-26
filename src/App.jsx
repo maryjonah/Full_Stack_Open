@@ -13,7 +13,6 @@ import loginService from './services/login'
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false)
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
@@ -39,19 +38,11 @@ const App = () => {
   }, [])
 
   // Add a new Note
-  const addNote = (event) => {
-    event.preventDefault()
-
-    const noteObject = {
-      content: newNote,
-      important: Math.random() > 0.5,
-    }
-  
+  const addNote = (noteObject) => {  
     noteService
     .create(noteObject)
     .then(returnedNote => {
       setNotes(notes.concat(returnedNote))
-      setNewNote('')
     })
   }
 
@@ -72,9 +63,9 @@ const App = () => {
       })
   }
 
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value)
-  }
+  // const handleNoteChange = (event) => {
+  //   setNewNote(event.target.value)
+  // }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -113,6 +104,14 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important)
 
+  const noteForm = () => {
+    return (
+    <Togglable buttonLabel='new note'>
+      <NoteForm createNote={ addNote} />
+    </Togglable>
+    )
+  }
+
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
     const showWhenVisible = { display: loginVisible ? '' : 'none'}
@@ -150,13 +149,7 @@ const App = () => {
       { user === null ? loginForm() : 
         <div>
           <p>{user.name} logged-in</p>
-          <Togglable buttonLabel="new note">
-              <NoteForm
-                  onSubmit={addNote}
-                  value={newNote}
-                  handleChange={ handleNoteChange }
-              />
-          </Togglable>
+          { noteForm() }
           { logOut() }
         </div>
       }
