@@ -4,6 +4,8 @@ import Note from './components/Note'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
 import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
+import NoteForm from './components/NoteForm'
 
 import noteService from './services/notes'
 import loginService from './services/login'
@@ -135,20 +137,10 @@ const App = () => {
     )
   }
 
-  const noteForm = () => (
-    <form onSubmit={addNote}>
-    <input
-        value={newNote}
-        onChange={handleNoteChange}
-      />
-      <button type="submit">save</button>
-    </form> 
-  )
 
   const logOut = () => (
-    <button onClick={() => logOutUser()}>Logout </button>
+    <button onClick={() => logOutUser()}>logout </button>
   )
-
 
   return (
     <div>
@@ -158,10 +150,17 @@ const App = () => {
       { user === null ? loginForm() : 
         <div>
           <p>{user.name} logged-in</p>
-          { noteForm() }
+          <Togglable buttonLabel="new note">
+              <NoteForm
+                  onSubmit={addNote}
+                  value={newNote}
+                  handleChange={ handleNoteChange }
+              />
+          </Togglable>
           { logOut() }
         </div>
       }
+
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>
@@ -173,6 +172,7 @@ const App = () => {
           <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />
         )}
       </ul>
+
 
       <Footer />
     </div>
