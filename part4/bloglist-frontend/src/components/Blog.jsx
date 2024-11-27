@@ -1,14 +1,13 @@
 import { useState } from 'react'
 
 const Blog = ({ blog }) => {
-  const [showFullDetails, setShowFullDetails] = useState(false)
+  const [showFullDetails, setShowFullDetails] = useState(true)
 
   const hideWhenVisible = { display: showFullDetails ? 'none' : '' }
-  const showWhenVisible = { display: showFullDetails ? '' : 'none' }
+  // const showWhenVisible = { display: showFullDetails ? '' : 'none' }
 
   const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
+    paddingLeft: 5,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
@@ -16,10 +15,14 @@ const Blog = ({ blog }) => {
 
   return (
   <div style={blogStyle }>
-    <p>{blog.title}<button onClick={() => setShowFullDetails(!showFullDetails)}>{showFullDetails ? 'show' : 'hide '}</button></p>
-    <p>{blog.url}</p>
-    <p>likes {blog.likes}</p>
-    <p>{blog.author}</p>
+    <p>{blog.title} <button onClick={() => setShowFullDetails(!showFullDetails)}>{showFullDetails ? 'view' : 'hide '}</button></p>
+    
+    <div style={ hideWhenVisible }>
+      <p>{blog.url}</p>
+      <p>likes {blog.likes} <button>like</button></p>
+      <p>{blog.author}</p>
+    </div>
+
   </div>  
   )
 }
