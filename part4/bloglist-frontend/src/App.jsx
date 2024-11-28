@@ -62,6 +62,20 @@ const App = () => {
     })
   }
 
+  // increase like when button is clicked
+  const increaseLike = async (id) => {
+    const blog = blogs.find(blog => blog.id === id)
+    const updatedBlog = { ...blog, likes: blog.likes+1 }
+
+    try {
+      const returnedBlog = await blogService.update(id, updatedBlog)
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+    } catch(exception) {
+      setDisplayMsg(`Note ${blog} was already removed from server`)
+      setTimeout(() => { setDisplayMsg(null)}, 5000)
+    }
+  }
+
   const handleLogin = async event => {
     event.preventDefault()
 
@@ -130,7 +144,7 @@ const App = () => {
       <h2>create new </h2>
       { newBlogForm() }
 
-      {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+      {blogs.map(blog => <Blog key={blog.id} blog={blog} updateLikes={() => increaseLike(blog.id)} />)}
     </div>
   )
 
