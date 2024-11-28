@@ -136,6 +136,8 @@ const App = () => {
     return <button onClick={() => logOutUser()}>Logout</button>
   }
 
+  const displayBlogByLikes = blogs.sort((firstBlog, secBlog) => firstBlog.likes - secBlog.likes)
+
   const blogInfo = () => (
     <div>
       <h2>blogs</h2>
@@ -144,7 +146,7 @@ const App = () => {
       <h2>create new </h2>
       { newBlogForm() }
 
-      {blogs.map(blog => <Blog key={blog.id} blog={blog} updateLikes={() => increaseLike(blog.id)} />)}
+      {displayBlogByLikes.map(blog => <Blog key={blog.id} blog={blog} updateLikes={() => increaseLike(blog.id)} />)}
     </div>
   )
 
