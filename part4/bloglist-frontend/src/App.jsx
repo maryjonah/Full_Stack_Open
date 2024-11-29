@@ -65,13 +65,15 @@ const App = () => {
   // delete blog handler
   const deleteBlog = async (id) => {
     const blogToRemove = blogs.find(blog => blog.id === id)
-    try {
-      const updatedBlogs = blogs.filter(blog => blog.id !== id)
-      await blogService.remove(id, blogToRemove)
-      console.log(updatedBlogs)
-      setBlogs(updatedBlogs)
-    } catch (exception) {
-      setTimeout(() => { setDisplayMsg(null)}, 5000)
+    if(window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`)) {
+      try {
+        const updatedBlogs = blogs.filter(blog => blog.id !== id)
+        await blogService.remove(id, blogToRemove)
+        console.log(updatedBlogs)
+        setBlogs(updatedBlogs)
+      } catch (exception) {
+        setTimeout(() => { setDisplayMsg(null)}, 5000)
+      }        
     }
   }
 
