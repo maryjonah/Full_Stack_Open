@@ -170,7 +170,8 @@ const App = () => {
           key={ blog.id } 
           blog={ blog }
           deleteBlog={ () => deleteBlog(blog.id) } 
-          updateLikes={ () => increaseLike(blog.id) } />
+          updateLikes={ () => increaseLike(blog.id) }
+          currentUser= { user.username } />
       )}
     </div>
   )
