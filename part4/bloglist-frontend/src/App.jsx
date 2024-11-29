@@ -21,10 +21,10 @@ const App = () => {
   const [newAuthor, setAuthor] = useState('')
   const [newUrl, setUrl] = useState('')
 
-
+  // get all blogs stored in database
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs.sort((a, b) => a.likes - b.likes))
     )  
   }, [])
 
@@ -62,6 +62,19 @@ const App = () => {
     })
   }
 
+  // delete blog handler
+  const deleteBlog = async (id) => {
+    const blogToRemove = blogs.find(blog => blog.id === id)
+    try {
+      const updatedBlogs = blogs.filter(blog => blog.id !== id)
+      await blogService.remove(id, blogToRemove)
+      console.log(updatedBlogs)
+      setBlogs(updatedBlogs)
+    } catch (exception) {
+      setTimeout(() => { setDisplayMsg(null)}, 5000)
+    }
+  }
+
   // increase like when button is clicked
   const increaseLike = async (id) => {
     const blog = blogs.find(blog => blog.id === id)
@@ -76,6 +89,7 @@ const App = () => {
     }
   }
 
+  // handler called when user wants to login
   const handleLogin = async event => {
     event.preventDefault()
 
@@ -96,6 +110,7 @@ const App = () => {
     }
   }
 
+  // the form displayed to user for login
   const loginForm = () => (
     <form onSubmit={handleLogin}>
     <h2>log in to application</h2>
@@ -125,6 +140,7 @@ const App = () => {
     )
   }
 
+  // implementation for log out
   const logOutUser = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
@@ -136,6 +152,7 @@ const App = () => {
     return <button onClick={() => logOutUser()}>Logout</button>
   }
 
+  // sort the blogs on page at any time
   const displayBlogByLikes = blogs.sort((firstBlog, secBlog) => firstBlog.likes - secBlog.likes)
 
   const blogInfo = () => (
@@ -146,7 +163,13 @@ const App = () => {
       <h2>create new </h2>
       { newBlogForm() }
 
-      {displayBlogByLikes.map(blog => <Blog key={blog.id} blog={blog} updateLikes={() => increaseLike(blog.id)} />)}
+      {displayBlogByLikes.map(blog => 
+        <Blog 
+          key={ blog.id } 
+          blog={ blog }
+          deleteBlog={ () => deleteBlog(blog.id) } 
+          updateLikes={ () => increaseLike(blog.id) } />
+      )}
     </div>
   )
 
