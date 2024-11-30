@@ -15,7 +15,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [displayMsg, setDisplayMsg] = useState(null)
   const [isSuccess, setisSuccess] = useState(false)
-  
+
   // state for adding new blog details
   const [newTitle, setTitle] = useState('')
   const [newAuthor, setAuthor] = useState('')
@@ -25,7 +25,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs.sort((a, b) => a.likes - b.likes))
-    )  
+    )
   }, [])
 
   // check if user details is stored in localStorage then create token which will be needed for creating a blog
@@ -50,16 +50,16 @@ const App = () => {
     }
 
     blogService
-    .create(blogObject)
-    .then(returnedBlog => {
-      setBlogs(blogs.concat(returnedBlog))
-      setDisplayMsg(`a new blog ${newTitle} by ${newAuthor} added`)
-      setisSuccess(true)
-      setTimeout(() => setDisplayMsg(null), 5000)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-    })
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+        setDisplayMsg(`a new blog ${newTitle} by ${newAuthor} added`)
+        setisSuccess(true)
+        setTimeout(() => setDisplayMsg(null), 5000)
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+      })
   }
 
   // delete blog handler
@@ -72,7 +72,7 @@ const App = () => {
       } catch (exception) {
         setDisplayMsg('Failed to delete the blog')
         setTimeout(() => { setDisplayMsg(null)}, 5000)
-      }        
+      }
     }
   }
 
@@ -114,15 +114,15 @@ const App = () => {
   // the form displayed to user for login
   const loginForm = () => (
     <form onSubmit={handleLogin}>
-    <h2>log in to application</h2>
-    <div>
-      username <input type="text" value={username} name="Username" onChange={({target}) => setUsername(target.value)} />
-    </div>
-    <div>
-      password <input type="text" value={password} name="Password" onChange={({target}) => setPassword(target.value)} />
-    </div>
-    <button type="submit">login</button>
-  </form>
+      <h2>log in to application</h2>
+      <div>
+        username <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
+      </div>
+      <div>
+        password <input type="text" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
+      </div>
+      <button type="submit">login</button>
+    </form>
   )
 
   const newBlogForm = () => {
@@ -134,8 +134,8 @@ const App = () => {
           author={ newAuthor }
           url={ newUrl }
           handleTitle={({ target }) => setTitle(target.value)}
-          handleAuthor={({ target}) => setAuthor(target.value)}
-          handleUrl={({ target }) => setUrl(target.value)}      
+          handleAuthor={({ target }) => setAuthor(target.value)}
+          handleUrl={({ target }) => setUrl(target.value) }
         />
       </Togglable>
     )
@@ -164,11 +164,11 @@ const App = () => {
       <h2>create new </h2>
       { newBlogForm() }
 
-      {displayBlogByLikes.map(blog => 
-        <Blog 
-          key={ blog.id } 
+      {displayBlogByLikes.map(blog =>
+        <Blog
+          key={ blog.id }
           blog={ blog }
-          deleteBlog={ () => deleteBlog(blog.id) } 
+          deleteBlog={ () => deleteBlog(blog.id) }
           updateLikes={ () => increaseLike(blog.id) }
           currentUser= { user.username } />
       )}
@@ -178,10 +178,10 @@ const App = () => {
   return (
     <div>
       <Notification displayMsg={displayMsg} isSuccess={isSuccess} />
-      { user === null ? loginForm() : 
-      <div>
-        { blogInfo() }
-      </div> } 
+      { user === null ? loginForm() :
+        <div>
+          { blogInfo() }
+        </div> }
     </div>
   )
 }

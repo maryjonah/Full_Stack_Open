@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types'
 import { useState } from 'react'
+
 
 const Blog = ({ blog, updateLikes, deleteBlog, currentUser }) => {
   const [showFullDetails, setShowFullDetails] = useState(true)
@@ -14,18 +16,25 @@ const Blog = ({ blog, updateLikes, deleteBlog, currentUser }) => {
   }
 
   return (
-  <div style={blogStyle }>
-    <p>{blog.title} <button onClick={() => setShowFullDetails(!showFullDetails)}>{showFullDetails ? 'view' : 'hide '}</button></p>
+    <div style={blogStyle }>
+      <p>{blog.title} <button onClick={() => setShowFullDetails(!showFullDetails)}>{showFullDetails ? 'view' : 'hide '}</button></p>
     
-    <div style={ hideWhenVisible }>
-      <p>{blog.url}</p>
-      <p>likes {blog.likes} <button onClick={ updateLikes }>like</button></p>
-      <p>{blog.author}</p>
-      { canRemove && <button onClick={ deleteBlog }>remove</button>}
-    </div>
+      <div style={ hideWhenVisible }>
+        <p>{blog.url}</p>
+        <p>likes {blog.likes} <button onClick={ updateLikes }>like</button></p>
+        <p>{blog.author}</p>
+        { canRemove && <button onClick={ deleteBlog }>remove</button>}
+      </div>
 
-  </div>  
+    </div>  
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  updateLikes: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+  currentUser: PropTypes.string.isRequired
 }
 
 export default Blog
