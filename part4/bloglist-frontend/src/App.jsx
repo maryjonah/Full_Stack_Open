@@ -67,11 +67,10 @@ const App = () => {
     const blogToRemove = blogs.find(blog => blog.id === id)
     if(window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`)) {
       try {
-        const updatedBlogs = blogs.filter(blog => blog.id !== id)
-        await blogService.remove(id, blogToRemove)
-        console.log(updatedBlogs)
-        setBlogs(updatedBlogs)
+        await blogService.remove(id)
+        setBlogs(blogs.filter(blog => blog.id !== id))
       } catch (exception) {
+        setDisplayMsg('Failed to delete the blog')
         setTimeout(() => { setDisplayMsg(null)}, 5000)
       }        
     }
