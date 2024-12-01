@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
@@ -26,5 +27,14 @@ describe('<Blog />', () => {
         const otherTextDiv = container.querySelector('.otherBlogInfo')
         expect(otherTextDiv).toHaveStyle('display: none')
       
+    })
+
+    test('when view button is clicked, blog author, likes, and url is displayed', async () => {
+        const user = userEvent.setup()
+        const viewBtn = screen.getByText('view')
+        await user.click(viewBtn)
+
+        const otherBlogDetails = container.querySelector('.otherBlogInfo')
+        expect(otherBlogDetails).not.toHaveStyle('display: none')
     })
 })
