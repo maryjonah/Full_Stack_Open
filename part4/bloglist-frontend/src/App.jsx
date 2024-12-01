@@ -40,7 +40,6 @@ const App = () => {
 
   // executes when the form to create a new blog is submitted
   const addBlog = (event) => {
-    event.preventDefault()
 
     const blogObject = {
       title: newTitle,
