@@ -16,17 +16,17 @@ const Blog = ({ blog, updateLikes, deleteBlog, currentUser }) => {
   }
 
   return (
-    <div style={blogStyle }>
+    <div style={ blogStyle } className='blog'>
       <p>{blog.title} <button onClick={() => setShowFullDetails(!showFullDetails)}>{showFullDetails ? 'view' : 'hide '}</button></p>
-    
-      <div style={ hideWhenVisible }>
+
+      <div style={ hideWhenVisible } className='otherBlogInfo'>
         <p>{blog.url}</p>
         <p>likes {blog.likes} <button onClick={ updateLikes }>like</button></p>
         <p>{blog.author}</p>
         { canRemove && <button onClick={ deleteBlog }>remove</button>}
       </div>
 
-    </div>  
+    </div>
   )
 }
 
