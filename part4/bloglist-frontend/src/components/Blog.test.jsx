@@ -36,4 +36,28 @@ describe('<Blog />', () => {
     const otherBlogDetails = container.querySelector('.otherBlogInfo')
     expect(otherBlogDetails).not.toHaveStyle('display: none')
   })
+
+})
+
+test('clicking the like button two times calls the event handler twice', async () => {
+
+  const blog = {
+    title: 'Hello Here',
+    author: 'Ellen Gaydos',
+    url: 'https://www.npr.org/2024/11/29/1215793964/nprs-book-of-the-day-pig-years-what-the-chicken-knows',
+    user: {
+      username: 'ekuajonah'
+    }
+  }
+
+  const mockLikeHandler = vi.fn()
+  render(<Blog blog={ blog } updateLikes={ mockLikeHandler } />)
+
+  const user = userEvent.setup()
+  const likeBtn = screen.getByText('like post')
+
+  await user.click(likeBtn)
+  await user.click(likeBtn)
+
+  expect(mockLikeHandler.mock.calls).toHaveLength(2)
 })

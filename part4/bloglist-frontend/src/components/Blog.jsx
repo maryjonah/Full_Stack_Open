@@ -21,7 +21,7 @@ const Blog = ({ blog, updateLikes, deleteBlog, currentUser }) => {
 
       <div style={ hideWhenVisible } className='otherBlogInfo'>
         <p>{blog.url}</p>
-        <p>likes {blog.likes} <button onClick={ updateLikes }>like</button></p>
+        <p>likes {blog.likes} <button onClick={ updateLikes } className='likeBtn'>like post</button></p>
         <p>{blog.author}</p>
         { canRemove && <button onClick={ deleteBlog }>remove</button>}
       </div>
