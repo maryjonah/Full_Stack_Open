@@ -99,7 +99,7 @@ const App = () => {
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
 
       blogService.setToken(user.token)
-
+      console.log('User has logged in successfully with details', user)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -115,10 +115,10 @@ const App = () => {
     <form onSubmit={handleLogin}>
       <h2>log in to application</h2>
       <div>
-        username <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
+        username <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} data-testid="username" />
       </div>
       <div>
-        password <input type="text" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
+        password <input type="text" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} data-testid="password" />
       </div>
       <button type="submit">login</button>
     </form>
@@ -154,11 +154,12 @@ const App = () => {
 
   // sort the blogs on page at any time
   const displayBlogByLikes = blogs.sort((firstBlog, secBlog) => firstBlog.likes - secBlog.likes)
+  // console.log(displayBlogByLikes)
 
   const blogInfo = () => (
     <div>
       <h2>blogs</h2>
-      <p>{user.username} logged in { logOutBtn() } </p>
+      <p>{user.name} logged in { logOutBtn() } </p>
 
       <h2>create new </h2>
       { newBlogForm() }
