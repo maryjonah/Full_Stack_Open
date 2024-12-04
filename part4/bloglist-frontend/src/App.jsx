@@ -158,7 +158,7 @@ const App = () => {
   const blogInfo = () => (
     <div>
       <h2>blogs</h2>
-      <p>{user.name} logged in { logOutBtn() } </p>
+      <p>{user.username} logged in { logOutBtn() } </p>
 
       <h2>create new </h2>
       { newBlogForm() }
